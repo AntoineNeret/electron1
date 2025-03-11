@@ -1,6 +1,7 @@
 //Processus principal
 
 const {app, BrowserWindow} = require("electron")
+const path = require("path");
 
 //Créer la fenêtre principale
 
@@ -9,8 +10,9 @@ function createWindow() {
         width: 800,
         height: 600,
         webPreferences: {
-            nodeIntegration: true, //Acces aux API Node depuis le processus de rendu
-            contextIsolation: false,
+            nodeIntegration: false, //Acces aux API Node depuis le processus de rendu
+            contextIsolation: true,
+            preload: path.join(__dirname, 'src/js/preload.js'),
         }
     })
     window.loadFile('src/pages/index.html')
@@ -18,7 +20,6 @@ function createWindow() {
 
 //Attendre l'initialisation de l'application
 app.whenReady().then( () => {
-    console.log("application initialisée")
     createWindow()
     app.on('activate', () => {
         if (BrowserWindow.getAllWindows().length === 0) {
