@@ -1,9 +1,17 @@
 //Processus de rendu
 
+
 const electronVersion = document.querySelector('#electron-version');
 const nodeVersion = document.querySelector('#node-version');
 const chromiumVersion = document.querySelector('#chromium-version');
 
-electronVersion.textContent = versions.electron
-nodeVersion.textContent = versions.node
-chromiumVersion.textContent = versions.chromium
+async function lesVersions() {
+    const version = await versions.getVersions();
+
+
+    electronVersion.textContent = version.electron
+    nodeVersion.textContent = version.node
+    chromiumVersion.textContent = version.chromium
+}
+
+lesVersions()
