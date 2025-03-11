@@ -1,12 +1,15 @@
 //Processus principal
 
-const {app, BrowserWindow, ipcMain} = require("electron")
+const {app, BrowserWindow, ipcMain, Menu} = require("electron")
 const path = require("path");
+
+let window
+
 
 //Créer la fenêtre principale
 
 function createWindow() {
-    const window = new BrowserWindow({
+     window = new BrowserWindow({
         width: 800,
         height: 600,
         webPreferences: {
@@ -16,7 +19,57 @@ function createWindow() {
             preload: path.join(__dirname, 'src/js/preload.js'),
         }
     })
+    //Création du menu
+    createMenu()
     window.loadFile('src/pages/index.html')
+}
+
+//Fonction permettant de créer un menu personnalisé
+function createMenu() {
+    //Créer un tableau qui va représenter le menu
+    const template = [
+        {
+            label: 'App',
+            submenu: [
+                {
+                    label: 'Versions',
+                    accelerator: 'V',
+                    click: () => window.loadFile('src/pages/index.html')
+                },
+                {
+                  type: 'separator'
+                },
+                {
+                    label: 'Quitter',
+                    accelerator: process.platform === "darwin" ? 'Cmd+Q' : 'Esc',
+                    click: () => app.quit()
+                }
+            ]
+        },
+        {
+            label: 'Tâches',
+            submenu: [
+                {
+                   label: 'Lister',
+                   accelerator: 'L',
+                   click: () => window.loadFile('src/pages/liste-taches.html')
+                },
+                {
+                    label: 'Ajouter',
+                    accelerator: 'A',
+                    click: () => window.loadFile('src/pages/ajoute-taches.html')
+                }
+            ]
+
+        }
+    ]
+
+    //Construire le menu à partir du modèle
+    const menu = Menu.buildFromTemplate(template)
+
+    //Définir le menu comme étant le menu de l'application
+    Menu.setApplicationMenu(menu)
+
 }
 
 //Attendre l'initialisation de l'application
