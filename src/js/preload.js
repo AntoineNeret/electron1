@@ -13,5 +13,3 @@ contextBridge.exposeInMainWorld('todosAPI',{
     getAll : () =>  ipcRenderer.invoke('todos:getAll'),
     setTodo : (titre) => ipcRenderer.invoke('todos:add',titre)
 })
-
-console.log("Preload chargé avec succès")

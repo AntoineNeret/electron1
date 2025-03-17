@@ -153,7 +153,7 @@ ipcMain.handle("todos:getAll", async () => {
 
 async function setTodo(titre) {
     try{
-        const [result] = await pool.query('INSERT INTO todos (titre) VALUES (?)', [titre])
+        await pool.query('INSERT INTO todos (titre) VALUES (?)', [titre])
         return
     }catch (error) {
         console.error('Erreur lors de l\'ajout d\'une tâche')
