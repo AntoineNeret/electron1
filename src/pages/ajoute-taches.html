@@ -9,6 +9,20 @@
   <title>Versions</title>
 </head>
 <body>
-<h1>Ajout d'une nouvelle tâche</h1>
+<h1 class="text-center">Ajout d'une nouvelle tâche</h1>
+<div class="container">
+<form id="ajoutForm" class="mt-5 w-50 mx-auto text-center">
+  <div class="mb-3 shadow">
+    <label for="inputTitre" class="form-label fw-bold">Titre de la tâche</label>
+    <input type="text" class="form-control" id="inputTitre" aria-describedby="emailHelp">
+  </div>
+<!--  <div class="mb-3">-->
+<!--    <label for="exampleInputPassword1" class="form-label">Password</label>-->
+<!--    <input type="password" class="form-control" id="exampleInputPassword1">-->
+<!--  </div>-->
+  <button id="ajoutTache" class="btn btn-primary">Submit</button>
+</form>
+</div>
+<script src="../js/ajoute-taches.js"></script>
 </body>
 </html>

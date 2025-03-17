@@ -82,12 +82,12 @@ function createMenu() {
             submenu: [
                 {
                    label: 'Lister',
-                   accelerator: 'L',
+                   // accelerator: 'L',
                    click: () => window.loadFile('src/pages/liste-taches.html')
                 },
                 {
                     label: 'Ajouter',
-                    accelerator: 'A',
+                    // accelerator: 'A',
                     click: () => window.loadFile('src/pages/ajoute-taches.html')
                 }
             ]
@@ -147,5 +147,25 @@ ipcMain.handle("todos:getAll", async () => {
     }catch (error){
          dialog.showErrorBox('Erreur technique', 'Impossible de récupérer la liste des tâches')
         return [] //Retourne une promesse avec un tableau vide
+    }
+})
+
+
+async function setTodo(titre) {
+    try{
+        const [result] = await pool.query('INSERT INTO todos (titre) VALUES (?)', [titre])
+        return
+    }catch (error) {
+        console.error('Erreur lors de l\'ajout d\'une tâche')
+        throw error
+    }
+}
+ipcMain.handle("todos:add", async (event,titre) => {
+    try{
+        await setTodo(titre);
+        return {success: true}
+    }catch (error){
+        dialog.showErrorBox('Erreur technique', 'Impossible d\'ajouter une tâche')
+        return []
     }
 })
