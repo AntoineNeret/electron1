@@ -13,6 +13,7 @@ async function getListeTaches() {
                         <h5 class="card-title">${tache.titre}</h5>
                         <p class="card-text">Créée le ${tache.createdAt.toLocaleDateString()} à ${tache.createdAt.toLocaleTimeString()}</p>
                         <p  class="card-text"></p>
+                        <button data-id=${tache.id} class="btn-suppr btn btn-outline-danger">Supprimer</button>
                     </div>
                 </div>
         `).join('   ');
@@ -20,5 +21,19 @@ async function getListeTaches() {
 getListeTaches()
 
 rafraichirBouton.addEventListener('click', () => {
+    location.reload()
+})
+
+//Fonction qui appelle l'API pour supprimer une tâche à partir de son id
+async function deleteTarget(idTarget){
+    await todosAPI.delete(idTarget)
+}
+
+//On ajoute un écouteur sur l'événement de clique puis on regarde quel bouton de suppression est le plus proche
+//On récupère l'id de la tâche à laquelle appartient le bouton et on appelle la fonction pour supprimer
+listeTaches.addEventListener('click', (evt) => {
+    const target = evt.target.closest('.btn-suppr');
+    const idTarget = target.dataset.id;
+    deleteTarget(idTarget)
     location.reload()
 })

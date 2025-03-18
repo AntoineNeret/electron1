@@ -3,16 +3,17 @@
 const {app, BrowserWindow, ipcMain, Menu, dialog} = require("electron")
 const path = require("path")
 const mysql = require('mysql2/promise')
+require('dotenv').config()
 
 let window
 
 //Configuration de l'accès à la base de données
 const dbConfig = {
-    host: 'localhost',
-    port: 3306,
-    user: 'root',
-    password: '',
-    database: 'db_todos',
+    host: process.env.DB_HOST,
+    port: process.env.DB_PORT,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME,
     connectionLimit: 10, //Nombre maximal de connexions simultanées dans le pool
     waitForConnections: true,
     queueLimit: 0,
@@ -64,7 +65,7 @@ function createMenu() {
             submenu: [
                 {
                     label: 'Versions',
-                    accelerator: 'V',
+                    // accelerator: 'V',
                     click: () => window.loadFile('src/pages/index.html')
                 },
                 {
@@ -163,6 +164,26 @@ async function setTodo(titre) {
 ipcMain.handle("todos:add", async (event,titre) => {
     try{
         await setTodo(titre);
+        return {success: true}
+    }catch (error){
+        dialog.showErrorBox('Erreur technique', 'Impossible d\'ajouter une tâche')
+        return []
+    }
+})
+
+async function deleteTarget(idTarget){
+    try{
+        await pool.query('DELETE FROM todos WHERE id=(?)',[idTarget])
+        return
+    }catch (error){
+        console.error('Erreur lors de la suppression d\'une tâche')
+        throw error
+    }
+}
+
+ipcMain.handle("todos:delete", async (event, idTarget) => {
+    try{
+        await deleteTarget(idTarget)
         return {success: true}
     }catch (error){
         dialog.showErrorBox('Erreur technique', 'Impossible d\'ajouter une tâche')
